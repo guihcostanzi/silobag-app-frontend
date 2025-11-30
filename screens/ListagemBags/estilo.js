@@ -63,6 +63,7 @@ export const estilos = StyleSheet.create({
     borderRadius: 6,
     padding: 12,
     marginBottom: 8,
+    marginTop: 8,
     borderLeftWidth: 3,
     borderLeftColor: '#e5c745ff',
   },

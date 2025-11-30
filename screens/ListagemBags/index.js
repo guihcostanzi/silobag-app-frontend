@@ -108,7 +108,7 @@ export default function ListagemBags({ navigation }) {
           🌾 {formatarProduto(bag.produto)}
         </Text>
         <Text style={estilos.detalheBag}>
-          📦 {bag.capacidade ? `${bag.capacidade.toFixed(1)}t` : 'N/A'} • 📊 {bag.volume ? `${bag.volume.toFixed(1)}m³` : 'N/A'}
+          📦 {bag.capacidade ? `${bag.capacidade.toFixed(1)}ton` : 'N/A'} • 📊 {bag.volume ? `${bag.volume.toFixed(1)}ton` : 'N/A'}
         </Text>
         <Text style={estilos.detalheBag}>
           📅 {formatarData(bag.dataCadastro)}
