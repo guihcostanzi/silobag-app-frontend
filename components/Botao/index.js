@@ -7,7 +7,7 @@ import { estilosBotao } from "./estilosBotao";
 // texto: o texto exibido no botão
 // tipo: pode ser 'secundario', 'destaque', 'acaoPrimario', 'acaoSecundario', 'acaoNeutro'
 // ehDuplo: booleano para botões que ocupam o dobro do espaço
-export function Botao({ onPress, texto, tipo, ehDuplo, style, textStyle }) {
+export function Botao({ onPress, texto, tipo, style, textStyle }) {
   const estilosContainer = [estilosBotao.botao];
   const estilosTexto = [estilosBotao.texto];
 
@@ -28,10 +28,6 @@ export function Botao({ onPress, texto, tipo, ehDuplo, style, textStyle }) {
   } else if (tipo === "acaoNeutro") {
     estilosContainer.push(estilosBotao.botaoAcaoNeutro);
     estilosTexto.push(estilosBotao.textoAcaoNeutro);
-  }
-
-  if (ehDuplo) {
-    estilosContainer.push(estilosBotao.botaoDuplo);
   }
 
   // Permite sobrescrever estilos via props
