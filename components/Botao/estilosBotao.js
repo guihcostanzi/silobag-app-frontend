@@ -27,7 +27,7 @@ export const estilosBotao = StyleSheet.create({
   },
   texto: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: "500",
   },
   textoSecundario: {

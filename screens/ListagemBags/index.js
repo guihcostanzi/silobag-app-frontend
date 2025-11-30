@@ -73,10 +73,6 @@ export default function ListagemBags({ navigation }) {
     buscarBags();
   };
 
-  const verDetalhes = (bag) => {
-    navigation.navigate('DetalhesBag', { bag });
-  };
-
   const editarBag = (bag) => {
     navigation.navigate('CadastroEdicaoBag', { bag });
   };
@@ -117,20 +113,14 @@ export default function ListagemBags({ navigation }) {
       
       <View style={estilos.acoesBag}>
         <Botao
-          texto="Ver"
-          tipo="acaoAlternativo"
-          onPress={() => verDetalhes(bag)}
-          style={estilos.botaoAcao}
-        />
-        <Botao
           texto="Editar"
-          tipo="acaoTerciario"
+          tipo="acaoAlternativo"
           onPress={() => editarBag(bag)}
           style={estilos.botaoAcao}
         />
         <Botao
           texto="Excluir"
-          tipo="acaoDestructivo"
+          tipo="acaoSecundario"
           onPress={() => excluirBag(bag.uid)}
           style={estilos.botaoAcao}
         />
