@@ -230,6 +230,12 @@ export default function ListagemBags({ navigation }) {
           onPress={abrirCadastro}
           style={estilos.botaoAdicionar}
         />
+        <Botao
+          texto="🗑"
+          tipo={termoBusca != "" ? "acaoNeutro" : "invisivel"}
+          onPress={() => setTermoBusca('')}
+          style={estilos.botaoAtualizar}
+        />
       </View>
 
       <FlatList

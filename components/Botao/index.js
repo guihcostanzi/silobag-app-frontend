@@ -29,6 +29,10 @@ export function Botao({ onPress, texto, tipo, style, textStyle }) {
     estilosContainer.push(estilosBotao.botaoAcaoNeutro);
     estilosTexto.push(estilosBotao.textoAcaoNeutro);
   }
+  else if (tipo === "invisivel") {
+    estilosContainer.push(estilosBotao.invisivel);
+    estilosTexto.push(estilosBotao.invisivel);
+  }
 
   // Permite sobrescrever estilos via props
   if (style) {
