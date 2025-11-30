@@ -41,11 +41,13 @@ export function CampoTexto({
         return {
           keyboardType: 'numeric',
           autoCapitalize: 'none',
+          autoCorrect: false,
         };
       case 'telefone':
         return {
           keyboardType: 'phone-pad',
           autoCapitalize: 'none',
+          autoCorrect: false,
         };
       default:
         return {
@@ -106,6 +108,7 @@ export function CampoTexto({
           multiline={multiline}
           numberOfLines={multiline ? numeroLinhas : 1}
           maxLength={maxCaracteres}
+          underlineColorAndroid="transparent"
           {...configuracoes}
           {...outrasProps}
         />
@@ -117,7 +120,7 @@ export function CampoTexto({
             activeOpacity={0.7}
           >
             <Text style={estilos.textoSenha}>
-              {senhaVisivel ? '🙈' : '👁️'}
+              {senhaVisivel ? '🙈' : '👀'}
             </Text>
           </TouchableOpacity>
         )}

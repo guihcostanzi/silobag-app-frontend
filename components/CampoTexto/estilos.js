@@ -18,14 +18,14 @@ export const estilos = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#1a1a1a',
     borderRadius: 8,
-    borderWidth: 2,
+    borderWidth: 1,
     borderColor: '#333',
     paddingHorizontal: 15,
-    minHeight: 50,
+    minHeight: 48,
   },
   containerFocado: {
     borderColor: '#e5c745ff',
-    backgroundColor: '#0f1f0f',
+    backgroundColor: '#121212',
   },
   containerErro: {
     borderColor: '#f44336',
@@ -40,6 +40,9 @@ export const estilos = StyleSheet.create({
     fontSize: 16,
     color: '#fff',
     paddingVertical: 12,
+    // Remove borda duplicada
+    outlineWidth: 0,
+    borderWidth: 0,
   },
   inputMultiline: {
     paddingVertical: 15,
