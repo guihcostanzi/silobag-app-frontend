@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, FlatList, Alert, ActivityIndicator } from 'react-native';
 import { Botao } from '../../components/Botao';
 import { CampoTexto } from '../../components/CampoTexto';
