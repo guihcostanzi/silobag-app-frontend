@@ -158,4 +158,48 @@ export const estilos = StyleSheet.create({
     height: 36,
     minHeight: 36,
   },
+
+  itemBagExclusao: {
+  backgroundColor: '#2a1a1a',
+  borderColor: '#f44336 ',
+  borderWidth: 2,
+  },
+
+  confirmacaoExclusao: {
+    padding: 20,
+    alignItems: 'center',
+  },
+
+  tituloConfirmacao: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#f44336',
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+
+  textoConfirmacao: {
+    fontSize: 16,
+    color: '#fff',
+    marginBottom: 4,
+    textAlign: 'center',
+  },
+
+  subtextoConfirmacao: {
+    fontSize: 14,
+    color: '#888',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+
+  botoesConfirmacao: {
+    flexDirection: 'row',
+    gap: 12,
+    width: '100%',
+  },
+
+  botaoConfirmacao: {
+    flex: 1,
+    height: 40,
+  },
 });

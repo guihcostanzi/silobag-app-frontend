@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, FlatList, ActivityIndicator } from 'react-native';
 import { Botao } from '../../components/Botao';
 import { CampoTexto } from '../../components/CampoTexto';
 import api from '../../services/api';
@@ -10,6 +10,7 @@ export default function ListagemBags({ navigation }) {
   const [termoBusca, setTermoBusca] = useState('');
   const [carregando, setCarregando] = useState(true);
   const [erro, setErro] = useState(null);
+  const [bagParaExcluir, setBagParaExcluir] = useState(null);
 
   const buscarBags = async () => {
     try {
@@ -34,28 +35,29 @@ export default function ListagemBags({ navigation }) {
     }
   };
 
+  const confirmarExclusao = (bagUid) => {
+    setBagParaExcluir(bagUid);
+  };
+
+  const cancelarExclusao = () => {
+    setBagParaExcluir(null);
+  };
+
   const excluirBag = async (bagUid) => {
-    Alert.alert(
-      'Confirmar Exclusão',
-      'Tem certeza que deseja excluir esta silobag?',
-      [
-        { text: 'Cancelar', style: 'cancel' },
-        {
-          text: 'Excluir',
-          style: 'destructive',
-          onPress: async () => {
-            try {
-              await api.delete(`/remover/${bagUid}`);
-              setBags(bags.filter(bag => bag.uid !== bagUid));
-              Alert.alert('Sucesso', 'Silobag excluída com sucesso!');
-            } catch (error) {
-              console.error('Erro ao excluir silobag:', error);
-              Alert.alert('Erro', 'Não foi possível excluir a silobag. Tente novamente.');
-            }
-          }
-        }
-      ]
-    );
+    try {
+      await api.delete(`/remover/${bagUid}`);
+      setBags(bags.filter(bag => bag.uid !== bagUid));
+      setBagParaExcluir(null);
+      
+      console.log('Silobag excluída com sucesso!');
+
+      atualizarDados();
+      
+    } catch (error) {
+      console.error('Erro ao excluir silobag:', error);
+      setBagParaExcluir(null);
+      atualizarDados();
+    }
   };
 
   useEffect(() => {
@@ -96,37 +98,72 @@ export default function ListagemBags({ navigation }) {
     return produto.replace(/_/g, ' ').toLowerCase().replace(/\b\w/g, l => l.toUpperCase());
   };
 
-  const renderizarItemBag = ({ item: bag }) => (
-    <View style={estilos.itemBag}>
-      <View style={estilos.infoBag}>
-        <Text style={estilos.nomeBag}>Silobag #{bag.codigo || 'S/N'}</Text>
-        <Text style={estilos.detalheBag}>
-          🌾 {formatarProduto(bag.produto)}
-        </Text>
-        <Text style={estilos.detalheBag}>
-          📦 {bag.capacidade ? `${bag.capacidade.toFixed(1)}ton` : 'N/A'} • 📊 {bag.volume ? `${bag.volume.toFixed(1)}ton` : 'N/A'}
-        </Text>
-        <Text style={estilos.detalheBag}>
-          📅 {formatarData(bag.dataCadastro)}
-        </Text>
+  const renderizarItemBag = ({ item: bag }) => {
+    // Se este item está marcado para exclusão, mostra confirmação
+    if (bagParaExcluir === bag.uid) {
+      return (
+        <View style={[estilos.itemBag, estilos.itemBagExclusao]}>
+          <View style={estilos.confirmacaoExclusao}>
+            <Text style={estilos.tituloConfirmacao}>⚠️ Confirmar Exclusão</Text>
+            <Text style={estilos.textoConfirmacao}>
+              Deseja excluir a Silobag #{bag.codigo}?
+            </Text>
+            <Text style={estilos.subtextoConfirmacao}>
+              Esta ação não pode ser desfeita.
+            </Text>
+            
+            <View style={estilos.botoesConfirmacao}>
+              <Botao
+                texto="Cancelar"
+                tipo="acaoNeutro"
+                onPress={cancelarExclusao}
+                style={estilos.botaoConfirmacao}
+              />
+              <Botao
+                texto="Excluir"
+                tipo="acaoSecundario"
+                onPress={() => excluirBag(bag.uid)}
+                style={estilos.botaoConfirmacao}
+              />
+            </View>
+          </View>
+        </View>
+      );
+    }
+
+    // Renderização normal do item
+    return (
+      <View style={estilos.itemBag}>
+        <View style={estilos.infoBag}>
+          <Text style={estilos.nomeBag}>Silobag #{bag.codigo || 'S/N'}</Text>
+          <Text style={estilos.detalheBag}>
+            🌾 {formatarProduto(bag.produto)}
+          </Text>
+          <Text style={estilos.detalheBag}>
+            📦 {bag.capacidade ? `${bag.capacidade.toFixed(1)}ton` : 'N/A'} • 📊 {bag.volume ? `${bag.volume.toFixed(1)}ton` : 'N/A'}
+          </Text>
+          <Text style={estilos.detalheBag}>
+            📅 {formatarData(bag.dataCadastro)}
+          </Text>
+        </View>
+        
+        <View style={estilos.acoesBag}>
+          <Botao
+            texto="Editar"
+            tipo="acaoAlternativo"
+            onPress={() => editarBag(bag)}
+            style={estilos.botaoAcao}
+          />
+          <Botao
+            texto="Excluir"
+            tipo="acaoSecundario"
+            onPress={() => confirmarExclusao(bag.uid)}
+            style={estilos.botaoAcao}
+          />
+        </View>
       </View>
-      
-      <View style={estilos.acoesBag}>
-        <Botao
-          texto="Editar"
-          tipo="acaoAlternativo"
-          onPress={() => editarBag(bag)}
-          style={estilos.botaoAcao}
-        />
-        <Botao
-          texto="Excluir"
-          tipo="acaoSecundario"
-          onPress={() => excluirBag(bag.uid)}
-          style={estilos.botaoAcao}
-        />
-      </View>
-    </View>
-  );
+    );
+  };
 
   const renderizarListaVazia = () => (
     <View style={estilos.listaVazia}>
