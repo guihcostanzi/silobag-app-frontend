@@ -35,7 +35,7 @@ export const estilosBotao = StyleSheet.create({
   },
   // Novo estilo para botões de ação na aplicação, como "Salvar", "Excluir"
   botaoAcaoPrimario: {
-    backgroundColor: '#28a745', // Verde para Salvar/Adicionar
+    backgroundColor: '#e5c745ff', // Verde para Salvar/Adicionar
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,
@@ -47,7 +47,14 @@ export const estilosBotao = StyleSheet.create({
     fontWeight: 'bold',
   },
   botaoAcaoSecundario: {
-    backgroundColor: '#dc3545', // Vermelho para Excluir
+    backgroundColor: '#ed5362ff', // Vermelho para Excluir
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 8,
+    marginVertical: 10,
+  },
+  botaoAcaoAlternativo: {
+    backgroundColor: '#f4b847ff', // Vermelho para Excluir
     paddingVertical: 12,
     paddingHorizontal: 20,
     borderRadius: 8,

@@ -22,6 +22,9 @@ export function Botao({ onPress, texto, tipo, ehDuplo, style, textStyle }) {
   } else if (tipo === "acaoSecundario") {
     estilosContainer.push(estilosBotao.botaoAcaoSecundario);
     estilosTexto.push(estilosBotao.textoAcaoSecundario);
+  } else if (tipo === "acaoAlternativo") {
+    estilosContainer.push(estilosBotao.botaoAcaoAlternativo);
+    estilosTexto.push(estilosBotao.textoAcaoNeutro);
   } else if (tipo === "acaoNeutro") {
     estilosContainer.push(estilosBotao.botaoAcaoNeutro);
     estilosTexto.push(estilosBotao.textoAcaoNeutro);

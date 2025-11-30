@@ -29,7 +29,7 @@ function AppNavigator() {
           name="CadastroEdicaoBag"
           component={CadastroEdicaoBag}
           options={({ route }) => ({
-            title: route.params?.uid ? 'Editar Bag' : 'Cadastrar Bag',
+            title: route.params?.bag ? 'Editar Bag' : 'Cadastrar Bag',
           })}
         />
       </Stack.Navigator>
