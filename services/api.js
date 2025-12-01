@@ -119,8 +119,7 @@ const api = {
         throw new Error(`HTTP Error: ${response.status}`);
       }
 
-      const data = await response.json();
-      return { data };
+      return { data: null };
     } catch (error) {
       clearTimeout(timeoutId);
       

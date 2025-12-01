@@ -161,7 +161,7 @@ export const estilos = StyleSheet.create({
 
   itemBagExclusao: {
   backgroundColor: '#2a1a1a',
-  borderColor: '#f44336 ',
+  borderColor: '#f44336',
   borderWidth: 2,
   },
 

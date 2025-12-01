@@ -9,6 +9,7 @@ export default function ListagemBags({ navigation }) {
   const [bags, setBags] = useState([]);
   const [termoBusca, setTermoBusca] = useState('');
   const [carregando, setCarregando] = useState(true);
+  const [carregandoBusca, setCarregandoBusca] = useState(false);
   const [erro, setErro] = useState(null);
   const [bagParaExcluir, setBagParaExcluir] = useState(null);
 
@@ -35,6 +36,38 @@ export default function ListagemBags({ navigation }) {
     }
   };
 
+  const buscarPorTermo = async (termo) => {
+    if (!termo.trim()) {
+      // Se não há termo, busca todas
+      buscarBags();
+      return;
+    }
+
+    try {
+      setCarregandoBusca(true);
+      setErro(null);
+      
+      const response = await api.get(`/buscarFiltros/${encodeURIComponent(termo)}`);
+      setBags(response.data);
+      
+    } catch (error) {
+      console.error('Erro ao buscar silobags:', error);
+      setErro('Erro na busca. Tente novamente.');
+      setBags([]);
+    } finally {
+      setCarregandoBusca(false);
+    }
+  };
+
+  // Evitar muitas requisições
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      buscarPorTermo(termoBusca);
+    }, 500); // Aguarda 500ms após parar de digitar
+
+    return () => clearTimeout(timeoutId);
+  }, [termoBusca]);
+
   const confirmarExclusao = (bagUid) => {
     setBagParaExcluir(bagUid);
   };
@@ -46,17 +79,20 @@ export default function ListagemBags({ navigation }) {
   const excluirBag = async (bagUid) => {
     try {
       await api.delete(`/remover/${bagUid}`);
-      setBags(bags.filter(bag => bag.uid !== bagUid));
+      buscarBags();
       setBagParaExcluir(null);
       
       console.log('Silobag excluída com sucesso!');
-
-      atualizarDados();
       
     } catch (error) {
       console.error('Erro ao excluir silobag:', error);
       setBagParaExcluir(null);
-      atualizarDados();
+      // Recarrega a lista após erro
+      if (termoBusca.trim()) {
+        buscarPorTermo(termoBusca);
+      } else {
+        buscarBags();
+      }
     }
   };
 
@@ -64,15 +100,17 @@ export default function ListagemBags({ navigation }) {
     buscarBags();
   }, []);
 
-  const bagsFiltradas = bags.filter(bag =>
-    bag.codigo?.toString().includes(termoBusca) ||
-    bag.produto?.toLowerCase().includes(termoBusca.toLowerCase()) ||
-    bag.capacidade?.toString().includes(termoBusca) ||
-    bag.volume?.toString().includes(termoBusca)
-  );
-
   const atualizarDados = () => {
-    buscarBags();
+    if (termoBusca.trim()) {
+      buscarPorTermo(termoBusca);
+    } else {
+      buscarBags();
+    }
+  };
+
+  const limparBusca = () => {
+    setTermoBusca('');
+    // buscarBags() será chamado automaticamente pelo useEffect
   };
 
   const editarBag = (bag) => {
@@ -99,7 +137,6 @@ export default function ListagemBags({ navigation }) {
   };
 
   const renderizarItemBag = ({ item: bag }) => {
-    // Se este item está marcado para exclusão, mostra confirmação
     if (bagParaExcluir === bag.uid) {
       return (
         <View style={[estilos.itemBag, estilos.itemBagExclusao]}>
@@ -131,7 +168,6 @@ export default function ListagemBags({ navigation }) {
       );
     }
 
-    // Renderização normal do item
     return (
       <View style={estilos.itemBag}>
         <View style={estilos.infoBag}>
@@ -206,16 +242,25 @@ export default function ListagemBags({ navigation }) {
       <View style={estilos.cabecalho}>
         <Text style={estilos.titulo}>Silobags</Text>
         <Text style={estilos.subtitulo}>
-          {bags.length} bag{bags.length !== 1 ? 's' : ''} cadastrada{bags.length !== 1 ? 's' : ''}
+          {bags.length} bag{bags.length !== 1 ? 's' : ''} {termoBusca ? 'encontrada' : 'cadastrada'}{bags.length !== 1 ? 's' : ''}
         </Text>
       </View>
 
-      <CampoTexto
-        placeholder="Buscar por código, produto, capacidade ou volume..."
-        valor={termoBusca}
-        onChangeText={setTermoBusca}
-        style={estilos.campoBusca}
-      />
+      <View style={estilos.containerBusca}>
+        <CampoTexto
+          placeholder="Buscar por código, produto, capacidade ou volume..."
+          valor={termoBusca}
+          onChangeText={setTermoBusca}
+          style={[estilos.campoBusca, { flex: 1 }]}
+        />
+        {carregandoBusca && (
+          <ActivityIndicator 
+            size="small" 
+            color="#e5c745ff" 
+            style={estilos.indicadorBusca}
+          />
+        )}
+      </View>
 
       <View style={estilos.botoesAcao}>
         <Botao
@@ -232,14 +277,14 @@ export default function ListagemBags({ navigation }) {
         />
         <Botao
           texto="🗑"
-          tipo={termoBusca != "" ? "acaoNeutro" : "invisivel"}
-          onPress={() => setTermoBusca('')}
+          tipo={termoBusca !== "" ? "acaoNeutro" : "invisivel"}
+          onPress={limparBusca}
           style={estilos.botaoAtualizar}
         />
       </View>
 
       <FlatList
-        data={bagsFiltradas}
+        data={bags}
         renderItem={renderizarItemBag}
         keyExtractor={(item) => item.uid}
         showsVerticalScrollIndicator={false}
